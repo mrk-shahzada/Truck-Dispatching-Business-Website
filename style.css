@@ -1,0 +1,367 @@
+@import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Space+Grotesk:wght@400;600&display=swap');
+
+:root {
+    --bg-color: #050505;
+    --text-color: #f0f0f0;
+    --accent: #ff4500; /* Neon Orange for logistics */
+    --accent-glow: rgba(255, 69, 0, 0.5);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: none; /* Hide default cursor */
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Space Grotesk', sans-serif;
+    overflow-x: hidden;
+}
+
+/* --- Dogstudio Style Noise Overlay --- */
+.noise {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.04;
+    background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Dissolve_Noise_Texture.png');
+    animation: noiseAnim 0.2s infinite;
+}
+@keyframes noiseAnim {
+    0% { transform: translate(0,0); }
+    10% { transform: translate(-5%,-5%); }
+    20% { transform: translate(-10%,5%); }
+    30% { transform: translate(5%,-10%); }
+    40% { transform: translate(-5%,15%); }
+    50% { transform: translate(-10%,5%); }
+    60% { transform: translate(15%,0); }
+    70% { transform: translate(0,15%); }
+    80% { transform: translate(3%,35%); }
+    90% { transform: translate(-10%,10%); }
+}
+
+/* --- Custom Cursor --- */
+.cursor, .cursor-follower {
+    position: fixed;
+    top: 0; left: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10000;
+    transform: translate(-50%, -50%);
+}
+.cursor {
+    width: 8px; height: 8px;
+    background: var(--accent);
+}
+.cursor-follower {
+    width: 40px; height: 40px;
+    border: 1px solid var(--accent);
+    transition: width 0.3s, height 0.3s, background 0.3s;
+}
+.cursor-follower.hovering {
+    width: 60px; height: 60px;
+    background: var(--accent-glow);
+    border-color: transparent;
+}
+
+/* --- 3D Moving Grid (The "Living" Background) --- */
+.bg-grid-container {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    perspective: 1000px;
+    z-index: -1;
+    overflow: hidden;
+}
+.bg-grid {
+    position: absolute;
+    bottom: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background-image: 
+        linear-gradient(rgba(255, 69, 0, 0.2) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 69, 0, 0.2) 1px, transparent 1px);
+    background-size: 50px 50px;
+    transform: rotateX(75deg);
+    animation: moveGrid 3s linear infinite;
+}
+@keyframes moveGrid {
+    0% { transform: rotateX(75deg) translateY(0); }
+    100% { transform: rotateX(75deg) translateY(50px); } /* Matches background-size */
+}
+
+/* --- Navigation --- */
+.navbar {
+    position: fixed;
+    top: 0; width: 100%;
+    padding: 2rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    mix-blend-mode: difference;
+}
+.logo {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+}
+.logo span { color: var(--accent); }
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+/* --- Hero Section --- */
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 0 4rem;
+}
+.hero-title {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 6vw;
+    line-height: 1.1;
+    display: flex;
+    flex-direction: column;
+}
+.hero-title .line {
+    display: block;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+.highlight {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--accent);
+    position: relative;
+}
+.highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; width: 100%; height: 10px;
+    background: var(--accent);
+    z-index: -1;
+    transform: skewX(-20deg);
+}
+.hero-subtitle {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    max-width: 500px;
+    color: #aaa;
+}
+.primary-btn {
+    display: inline-block;
+    margin-top: 3rem;
+    padding: 1rem 3rem;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    text-decoration: none;
+    font-family: 'Syncopate', sans-serif;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.3s;
+}
+.primary-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 100%; height: 100%;
+    background: var(--accent);
+    transition: left 0.3s;
+    z-index: -1;
+}
+.primary-btn:hover::before { left: 0; }
+.primary-btn:hover { color: var(--bg-color); }
+
+/* --- Services Section --- */
+.services {
+    padding: 10rem 4rem;
+    background: #000; /* Solid dark to contrast the grid */
+    position: relative;
+    z-index: 10;
+}
+.section-title {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 3rem;
+    margin-bottom: 5rem;
+    text-align: center;
+}
+.service-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+}
+.card {
+    background: #0a0a0a;
+    padding: 3rem;
+    border-top: 2px solid var(--accent);
+    transition: transform 0.5s ease;
+}
+.card:hover {
+    transform: translateY(-20px);
+}
+.card h3 {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: var(--accent);
+}
+
+
+/* --- Inner Page Headers --- */
+.page-hero {
+    height: 60vh;
+    display: flex;
+    align-items: flex-end;
+    padding: 0 4rem 4rem 4rem;
+}
+.page-title {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 5vw;
+    line-height: 1.1;
+    display: flex;
+    flex-direction: column;
+}
+.page-title .line {
+    display: block;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+/* --- Detailed Services Layout --- */
+.service-details {
+    padding: 5rem 4rem;
+    background: #000;
+    position: relative;
+    z-index: 10;
+}
+.service-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 4rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.service-number {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 2rem;
+    color: var(--accent);
+    width: 10%;
+}
+.service-info {
+    width: 80%;
+}
+.service-info h2 {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+.service-info p {
+    font-size: 1.2rem;
+    color: #aaa;
+    line-height: 1.6;
+    max-width: 800px;
+}
+
+/* --- Pricing Cards --- */
+.pricing-section {
+    padding: 5rem 4rem;
+    background: #000;
+    position: relative;
+    z-index: 10;
+}
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.pricing-card {
+    background: #0a0a0a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 4rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.4s ease;
+}
+.pricing-card:hover {
+    border-color: var(--accent);
+}
+.pricing-card h3 {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+.price {
+    font-size: 4rem;
+    font-family: 'Syncopate', sans-serif;
+    color: var(--accent);
+    margin-bottom: 2rem;
+}
+.price span { font-size: 1rem; color: #666; }
+.pricing-features {
+    list-style: none;
+    margin-bottom: 3rem;
+}
+.pricing-features li {
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: #ccc;
+    display: flex;
+    align-items: center;
+}
+.pricing-features li::before {
+    content: "■";
+    color: var(--accent);
+    margin-right: 15px;
+    font-size: 0.8rem;
+}
+
+/* --- Contact / Quote Form --- */
+.contact-section {
+    padding: 5rem 4rem;
+    background: #000;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    gap: 5rem;
+}
+.contact-info { width: 40%; }
+.contact-form { width: 60%; }
+.form-group {
+    margin-bottom: 3rem;
+    position: relative;
+}
+.form-group label {
+    display: block;
+    font-family: 'Syncopate', sans-serif;
+    font-size: 0.8rem;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.form-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1rem 0;
+    color: white;
+    font-size: 1.5rem;
+    font-family: 'Space Grotesk', sans-serif;
+    outline: none;
+    transition: border-color 0.3s;
+}
+.form-input:focus { border-color: var(--accent); }
+.submit-btn {
+    background: transparent;
+    border: none;
+    cursor: none; /* Inherits custom cursor */
+    font-size: 1.5rem;
+}
