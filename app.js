@@ -134,3 +134,72 @@ scrollElements.forEach((el, i) => {
         delay: i * 0.1 // Stagger effect
     });
 });
+
+
+// --- Mobile Menu Logic ---
+const hamburger = document.querySelector('.hamburger');
+const mobileMenu = document.querySelector('.mobile-menu');
+const mobileLinks = document.querySelectorAll('.mobile-link');
+const mobileContact = document.querySelector('.mobile-contact');
+
+let isMenuOpen = false;
+
+if(hamburger) {
+    hamburger.addEventListener('click', () => {
+        isMenuOpen = !isMenuOpen;
+        
+        // Toggle the "X" animation on the hamburger icon
+        hamburger.classList.toggle('active');
+
+        if (isMenuOpen) {
+            // Stop background scrolling
+            lenis.stop();
+
+            // Bring the menu overlay down
+            gsap.to(mobileMenu, {
+                y: "0%",
+                opacity: 1,
+                duration: 0.8,
+                ease: "power4.inOut"
+            });
+
+            // Stagger the links animating up
+            gsap.to(mobileLinks, {
+                y: 0,
+                opacity: 1,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: "power3.out",
+                delay: 0.4 // Wait for background to slide down slightly
+            });
+
+            // Fade in contact info
+            gsap.to(mobileContact, {
+                opacity: 1,
+                duration: 0.6,
+                delay: 0.8
+            });
+
+        } else {
+            // Re-enable background scrolling
+            lenis.start();
+
+            // Fade links out quickly
+            gsap.to([mobileLinks, mobileContact], {
+                y: 50,
+                opacity: 0,
+                duration: 0.3,
+                ease: "power3.in"
+            });
+
+            // Slide menu back up
+            gsap.to(mobileMenu, {
+                y: "-100%",
+                opacity: 0,
+                duration: 0.8,
+                ease: "power4.inOut",
+                delay: 0.2
+            });
+        }
+    });
+}

@@ -89,10 +89,10 @@ body {
 }
 @keyframes moveGrid {
     0% { transform: rotateX(75deg) translateY(0); }
-    100% { transform: rotateX(75deg) translateY(50px); } /* Matches background-size */
+    100% { transform: rotateX(75deg) translateY(50px); }
 }
 
-/* --- Navigation --- */
+/* --- Navigation (Desktop) --- */
 .navbar {
     position: fixed;
     top: 0; width: 100%;
@@ -116,6 +116,55 @@ body {
     font-weight: 600;
     text-transform: uppercase;
     font-size: 0.9rem;
+}
+
+/* --- Mobile Menu Styles (Hidden on Desktop) --- */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 101;
+    padding: 10px;
+}
+.hamburger div {
+    width: 35px;
+    height: 2px;
+    background-color: var(--text-color);
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+.mobile-menu {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-color: #050505;
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem 4rem;
+    transform: translateY(-100%); /* Hidden off-screen */
+    opacity: 0;
+}
+.mobile-links {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.mobile-link {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 10vw;
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    transform: translateY(50px); /* Setup for JS animation */
+    opacity: 0;
+}
+.mobile-contact {
+    margin-top: 4rem;
+    color: var(--accent);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.2rem;
+    opacity: 0;
 }
 
 /* --- Hero Section --- */
@@ -152,7 +201,7 @@ body {
 .hero-subtitle {
     margin-top: 2rem;
     font-size: 1.2rem;
-    max-width: 500px;
+    max-width: 500px; /* Fixed width bug */
     color: #aaa;
 }
 .primary-btn {
@@ -178,10 +227,10 @@ body {
 .primary-btn:hover::before { left: 0; }
 .primary-btn:hover { color: var(--bg-color); }
 
-/* --- Services Section --- */
+/* --- Services Section (Home Page) --- */
 .services {
     padding: 10rem 4rem;
-    background: #000; /* Solid dark to contrast the grid */
+    background: #000;
     position: relative;
     z-index: 10;
 }
@@ -212,7 +261,6 @@ body {
     color: var(--accent);
 }
 
-
 /* --- Inner Page Headers --- */
 .page-hero {
     height: 60vh;
@@ -232,7 +280,7 @@ body {
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }
 
-/* --- Detailed Services Layout --- */
+/* --- Detailed Services Layout (Services Page) --- */
 .service-details {
     padding: 5rem 4rem;
     background: #000;
@@ -252,9 +300,7 @@ body {
     color: var(--accent);
     width: 10%;
 }
-.service-info {
-    width: 80%;
-}
+.service-info { width: 80%; }
 .service-info h2 {
     font-family: 'Syncopate', sans-serif;
     font-size: 2.5rem;
@@ -267,7 +313,7 @@ body {
     max-width: 800px;
 }
 
-/* --- Pricing Cards --- */
+/* --- Pricing Cards (Pricing Page) --- */
 .pricing-section {
     padding: 5rem 4rem;
     background: #000;
@@ -289,9 +335,7 @@ body {
     overflow: hidden;
     transition: border-color 0.4s ease;
 }
-.pricing-card:hover {
-    border-color: var(--accent);
-}
+.pricing-card:hover { border-color: var(--accent); }
 .pricing-card h3 {
     font-family: 'Syncopate', sans-serif;
     font-size: 2rem;
@@ -322,7 +366,7 @@ body {
     font-size: 0.8rem;
 }
 
-/* --- Contact / Quote Form --- */
+/* --- Contact Form (Contact Page) --- */
 .contact-section {
     padding: 5rem 4rem;
     background: #000;
@@ -362,6 +406,79 @@ body {
 .submit-btn {
     background: transparent;
     border: none;
-    cursor: none; /* Inherits custom cursor */
+    cursor: none;
     font-size: 1.5rem;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN (Tablet & Mobile)
+   ========================================= */
+
+/* 1. Disable Custom Cursor on Touch Devices */
+@media (pointer: coarse) {
+    .cursor, .cursor-follower { display: none !important; }
+    * { cursor: auto !important; }
+}
+
+/* 2. Tablet Adjustments */
+@media (max-width: 1024px) {
+    .service-cards { grid-template-columns: repeat(2, 1fr); }
+    .pricing-grid { gap: 2rem; }
+    .contact-section { gap: 3rem; }
+    .hero-title, .page-title { font-size: 8vw; }
+}
+
+/* 3. Mobile Adjustments (Hamburger Menu & Stacking) */
+@media (max-width: 768px) {
+    
+    /* Hide desktop nav, show hamburger */
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    
+    .navbar {
+        padding: 1.5rem;
+        background: transparent;
+        backdrop-filter: none;
+    }
+
+    /* Animate Hamburger to "X" when active */
+    .hamburger.active .line1 {
+        transform: translateY(10px) rotate(45deg);
+        background-color: var(--accent);
+    }
+    .hamburger.active .line2 {
+        transform: translateY(-10px) rotate(-45deg);
+        background-color: var(--accent);
+    }
+
+    /* Reduce noise on mobile to save battery */
+    .noise { opacity: 0.02; }
+
+    /* Layout Padding for Mobile */
+    .hero { padding: 0 1.5rem; }
+    .services, .service-details, .pricing-section, .contact-section { padding: 4rem 1.5rem; }
+    .page-hero { padding: 0 1.5rem 3rem 1.5rem; height: 45vh; }
+    
+    /* Typography for Mobile */
+    .hero-title, .page-title { font-size: 11vw; }
+    .section-title { font-size: 2rem; margin-bottom: 3rem; }
+    
+    /* Stacking Grids to Single Column */
+    .service-cards, .pricing-grid { grid-template-columns: 1fr; }
+    .service-row { flex-direction: column; padding: 2.5rem 0; }
+    .service-number { width: 100%; margin-bottom: 1rem; font-size: 1.5rem; }
+    .service-info { width: 100%; }
+    .service-info h2 { font-size: 1.8rem; }
+    
+    /* Contact Form Stacking */
+    .contact-section { flex-direction: column; gap: 2rem; }
+    .contact-info, .contact-form { width: 100%; }
+    .mobile-menu { padding: 2rem 1.5rem; }
+}
+
+/* 4. Small Mobile Phones */
+@media (max-width: 480px) {
+    .pricing-card { padding: 2rem; }
+    .price { font-size: 3rem; }
+    .form-input { font-size: 1.2rem; }
 }
